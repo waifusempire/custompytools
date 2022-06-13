@@ -1,10 +1,13 @@
 """A new way to work with `.json` files."""
 
-
+import sys
 from typing import Any, Iterable, Optional, Type, Union, final
 from io import TextIOWrapper
 from typing import TypeVar
-from typing_extensions import Self
+if sys.version_info >= 3.11:
+    from typing import Self
+else:
+    from typing_extensions import Self
 
 
 # TODO Create seperate classes for JsonIn and JsonOut
@@ -15,7 +18,7 @@ DUMPED = TypeVar("DUMPED", bound="JsonIO.is_marked")
 
 
 class JsonObject:
-    def get(self: Self, key: str, default: Any = ...) -> Any | None: ...
+    def get(self: Self, key: str, default: Any = ...) -> Optional[Any} ...
     def remove(self: Self, key: str) -> None: ...
     def clear(self: Self) -> None: ...
     def items(self: Self) -> Any: ...
@@ -28,7 +31,7 @@ class JsonObject:
 
 
 class JsonArray:
-    def add(self: Self, object: object | None,
+    def add(self: Self, object: Optional[object],
             index: int = ...) -> None: ...
 
     @classmethod
@@ -43,13 +46,13 @@ class JsonArray:
 
 DictLike = TypeVar("DictLike", dict, JsonObject)
 ListLike = TypeVar("ListLike", list, JsonArray, tuple)
-Json_Object_or_Array = JsonArray | JsonObject | dict | list | tuple
+Json_Object_or_Array = Union[JsonArray, JsonObject, dict, list, tuple]
 
 
 @final
 class JsonIO:
-    def load(self, **kwargs) -> JsonArray | JsonObject: ...
-    def dump(self, data: DictLike | ListLike, **kwargs) -> None: ...
+    def load(self, **kwargs) -> Union[JsonArray, JsonObject]: ...
+    def dump(self, data: Union[DictLike, ListLike], **kwargs) -> None: ...
     @property
     def is_marked_loaded(self) -> bool: ...
     @property
