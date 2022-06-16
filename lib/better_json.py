@@ -180,17 +180,17 @@ class JsonIO:
 
     @property
     def file(self) -> TextIOWrapper:
-        return self._data[FILE]
+        return self.__data__[FILE]
 
     @property
     def mode(self) -> str:
-        return self._data[MODE]
+        return self.__data__[MODE]
 
     def _is_marked(self, _as: LOADED | DUMPED, /) -> bool:
         if _as == LOADED:
-            return self._data["loaded"]
+            return self.__data__["loaded"]
         elif _as == DUMPED:
-            return self._data["dumped"]
+            return self.__data__["dumped"]
         else:
             raise ValueError(
                 "Invalid value, _as may only be 'DUMPED' or 'LOADED'")
